@@ -1,4 +1,4 @@
-// BSQ DJ 2014
+// BSQ Guitar 2014
 // Property of CHERRY
 // LOOP
 var vendors = ['webkit', 'moz'];
@@ -12,6 +12,11 @@ var interval = 1000 / 60,
     currentTime = 0,
     delta = 0;
 
+var bsqDebug = false;
+if(!bsqDebug)  {
+    $("#time").hide();
+}
+
 
 var soundBGM;
 var arrBGM = [];
@@ -19,177 +24,12 @@ var arrVOICE = [];
 var currentBGM = 0;
 
 var dataRecord = [];
+var arrayNote = [];
 
 var position = 0;
 
 var lastNote;
 
-
-//var time;
-//var elapsed = 0;
-//function gameLoop1() {
-//    setTimeout(function () {
-//        requestAnimationFrame(gameLoop);
-//        // Drawing code goes here
-//        var now = new Date().getTime(),
-//            dt = now - (time || now);
-//        time = now;
-//
-//        // Drawing code goes here... for example updating an 'x' position:
-//        if (elapsed > 1000) {
-//        
-//            elapsed = elapsed - 1000;
-//        }			    
-//        elapsed += dt;
-//        
-//        $("#time").html(elapsed);
-//
-//
-//    }, 1000 / 60);
-//}
-
-//function gameLoop() {
-//
-//    window.requestAnimationFrame(gameLoop);
-//    currentTime = (new Date()).getTime();
-//    delta = (currentTime - lastTime);
-//
-//    if (delta > interval) {
-//        
-//        //if (bRecord) {
-//            
-//            //var temp;
-//            //
-//            //if (!bPHONEGAP) {
-//            //    temp = Math.round(soundBGM.currentTime * 1000);
-//            //    
-//            //    
-//            //    var percent = temp/(soundBGM.duration*1000) * 100;                
-//            //    percent = Math.round(percent);
-//            //    
-//            //    //$("#time").html(percent);
-//            //    //$("#slider").width((percent*555/100)+"px");
-//            //    
-//            //    if (percent == 100) {
-//            //        stopRecord();
-//            //    }
-//            //    
-//            //} else {
-//            //    soundBGM.getCurrentPosition(
-//            //        // success callback
-//            //        function (position) {
-//            //            if (position > -1) {
-//            //                temp = (position * 1000);
-//            //                
-//            //                
-//            //                var percent = temp/(soundBGM.getDuration()*1000) * 100;                
-//            //                percent = Math.round(percent);
-//            //                
-//            //                if (percent == 100) {
-//            //                    stopRecord();
-//            //                }
-//            //                
-//            //            }
-//            //        },
-//            //        // error callback
-//            //        function (e) { }
-//            //    );
-//            //
-//            //}
-//        //}
-//        //if (bReplay) {
-//        //  
-//        //    var temp;
-//        //
-//        //    if (!bPHONEGAP) {
-//        //        temp = Math.round(soundBGM.currentTime * 1000);
-//        //        
-//        //        
-//        //        var percent = temp/(soundBGM.duration*1000) * 100;                
-//        //        percent = Math.round(percent);
-//        //        
-//        //        $("#time").html(percent);
-//        //        $("#slider").width((percent*555/100)+"px");
-//        //        
-//        //        if (percent == 100) {
-//        //            stopReplay();
-//        //            
-//        //            popUP();
-//        //        }
-//        //
-//        //        for (var i = 0; i < dataRecord.length; i++) {
-//        //            var tempRecord = dataRecord[i].split(",");
-//        //            var tempTime = tempRecord[0];
-//        //            var tempNote = tempRecord[1];
-//        //
-//        //            var temp1 = parseInt(tempTime);
-//        //
-//        //
-//        //
-//        //            if ((temp1 - 10) < temp && (temp1 + 10) > temp) {
-//        //
-//        //                if (lastNote == 0 || lastNote != i) {
-//        //
-//        //                    playSound(parseInt(tempNote));
-//        //
-//        //                    console.log(temp1 + " " + parseInt(tempNote));
-//        //
-//        //                    lastNote = i;
-//        //                }
-//        //
-//        //
-//        //
-//        //            }
-//        //        }
-//        //        
-//        //        
-//        //    } else {
-//        //        soundBGM.getCurrentPosition(
-//        //            // success callback
-//        //            function (position) {
-//        //                if (position > -1) {
-//        //                    temp = (position * 1000);
-//        //
-//        //                    for (var i = 0; i < dataRecord.length; i++) {
-//        //                        var tempRecord = dataRecord[i].split(",");
-//        //                        var tempTime = tempRecord[0];
-//        //                        var tempNote = tempRecord[1];
-//        //
-//        //                        var temp1 = parseInt(tempTime);
-//        //                        
-//        //                        if ((temp1 - 10) < temp && (temp1 + 10) > temp) {
-//        //
-//        //                            if (lastNote == 0 || lastNote != i) {
-//        //
-//        //                                playSound(tempNote);
-//        //
-//        //                                //console.log(temp1 + " " + parseInt(tempNote));
-//        //
-//        //                                lastNote = i;
-//        //                            }
-//        //
-//        //
-//        //                        }
-//        //                    }
-//        //
-//        //                }
-//        //            },
-//        //            // error callback
-//        //            function (e) {
-//        //                //console.log("Error getting pos=" + e);
-//        //            }
-//        //        );
-//        //
-//        //    }
-//        //
-//        //
-//        //}
-//
-//        lastTime = currentTime - (delta % interval);
-//    }
-//
-//
-//}
 
 var strSnd = [];
 strSnd[0] = "res/SOUND/snd-0.mp3";
@@ -213,94 +53,6 @@ var beat = [];
 
 var counter = 0;
 
-function playSoundReplay(id) {
-    if (bPHONEGAP) {
-
-        var tempID = parseInt(id);
-
-        beat[tempID].pause();
-        beat[tempID].seekTo(0);
-        beat[tempID].play();
-    }
-}
-
-function playSound(id) {
-
-    if (bPHONEGAP) {
-
-        var tempID = parseInt(id);
-
-        //beat[tempID].pause();
-        //beat[tempID].seekTo(0);
-        //beat[tempID].play();
-
-        var url = strSnd[tempID];
-
-        var my_media = new Media(url,
-            // success callback
-            function() {
-                //console.log("playAudio():Audio Success");
-                //my_media.release();
-            },
-            // error callback
-            function(err) {
-                //console.log("playAudio():Audio Error: " + err);
-            }
-        );
-        // Play audio
-        my_media.play();
-
-    } else {
-        if (listAudio[id].currentTime > 0) {
-            listAudio[id].pause();
-            listAudio[id].currentTime = 0;
-            listAudio[id].play();
-        } else {
-            listAudio[id].play();
-        }
-    }
-
-    if (bRecord) {
-        var temp;
-
-        if (!bPHONEGAP) {
-            temp = Math.round(soundBGM.currentTime * 1000);
-
-
-            var tempRecord = temp + "," + id;
-
-            dataRecord.push(tempRecord);
-
-            $("#time").html(tempRecord + " length : " + dataRecord.length);
-            console.log(tempRecord);
-        } else {
-            soundBGM.getCurrentPosition(
-                // success callback
-                function(position) {
-                    if (position > -1) {
-                        temp = (position * 1000) + 10;
-
-                        var tempRecord = temp + "," + id;
-
-                        dataRecord.push(tempRecord);
-
-                        $("#time").html(tempRecord + " length : " + dataRecord.length);
-
-                        console.log(tempRecord);
-                        //console.log((position) + " sec");
-                    }
-                },
-                // error callback
-                function(e) {
-                    //console.log("Error getting pos=" + e);
-                }
-            );
-        }
-
-
-    }
-
-}
 
 
 if (bPHONEGAP) document.addEventListener("deviceready", onDeviceReady, false);
@@ -349,7 +101,7 @@ function onDeviceReady() {
     if (!bPHONEGAP) {
 
         arrBGM[0] = new Audio(strSnd[6]); arrBGM[0].volume = 0.5;
-        arrBGM[1] = new Audio(strSnd[7]); arrBGM[1].volume = 0.5;
+        arrBGM[1] = new Audio(strSnd[7]); arrBGM[1].volume = 0.3;
         arrBGM[2] = new Audio(strSnd[8]); arrBGM[2].volume = 0.5;
 
         soundBGM = arrBGM[currentBGM];
@@ -361,7 +113,7 @@ function onDeviceReady() {
         arrBGM[2] = new Media(strSnd[8], function() {}, function() {});
         
         arrBGM[0].setVolume(0.5);
-        arrBGM[1].setVolume(0.5);
+        arrBGM[1].setVolume(0.3);
         arrBGM[2].setVolume(0.5);
         
         soundBGM = arrBGM[currentBGM];
@@ -403,6 +155,10 @@ function onDeviceReady() {
             soundBGM.currentTime = 0;
         } else {
             soundBGM.seekTo(0);
+        }
+        
+        if (!bPHONEGAP) mainDurationBGM = soundBGM.duration * 1000;    
+        else { mainDurationBGM = soundBGM.getDuration() * 1000;
         }
 
         gotoScene("#panelGame");
@@ -463,12 +219,6 @@ function onDeviceReady() {
             }
         }
         
-        //if (tempid == 0 || tempid == 1) {
-        //    $($(".sprite-disc")[0]).addClass("pauseAni");
-        //}
-        //if (tempid == 2 || tempid == 3) {
-        //    $($(".sprite-disc")[1]).addClass("pauseAni");
-        //}
 
         playSound(tempid);
 
@@ -476,35 +226,12 @@ function onDeviceReady() {
     
     $(".buttonMusic").bind("touchend", function() {
         var tempid = $(this).attr("bsq-id");
-        
-       //if (tempid == 0 || tempid == 1) {
-       //     $($(".sprite-disc")[0]).removeClass("pauseAni");
-       // }
-       // if (tempid == 2 || tempid == 3) {
-       //     $($(".sprite-disc")[1]).removeClass("pauseAni");
-       // }
+      
     });
+    
+    draw();
 }
 
-//FAIL 0546 180914
-//var currentDuration = 0;
-//function getAtLastDuration(){
-//    if (bPHONEGAP) {
-//        var temp = soundBGM.getDuration();
-//        
-//        if (temp < 0) {
-//            
-//            return getAtLastDuration();
-//            
-//        }else
-//        {
-//            return temp;
-//        }
-//    }
-//    
-//    else return soundBGM.duration;
-//    
-//}
 
 var bTutorial = true;
 var stepTut = 0;
@@ -554,22 +281,7 @@ function sendAction() {
         "record": tempRecord
     };
     
-    //if (window.navigator.onLine) {
-    //    
-    //    ajaxSend(db, function(msg){
-    //        
-    //        if (JSON.parse(msg).result == 1) {
-    //            thankState();
-    //        }
-    //        
-    //    });
-    //    
-    //}else{
-    //    
-    //    localStorage.setItem(localStorage.length, JSON.stringify(db));
-    //    thankState();        
-    //}
-    
+   
     localStorage.setItem(localStorage.length, JSON.stringify(db));
     thankState();
     
@@ -646,13 +358,16 @@ function stopMusic() {
     }
     if (bReplay) {
         bReplay = false;
+        
+        bBreak = true;
     }
 
 }
 
 function stopRecord() {
-
-
+    
+    bBreak = true;
+    
     soundBGM.pause();
     bRecord = false;
 
@@ -661,12 +376,20 @@ function stopRecord() {
     } else {
         soundBGM.seekTo(0);
     }
-
+    
+    breakApart();
+    
     gotoScene("#panelReplay");
-
     arrVOICE[1].play();
+    
+    if (!bPHONEGAP) {
+        soundBGM.volume = 0.8;
+    }else{
+        soundBGM.setVolume(0.8);
+    }
 }
 
+////////////////////////////////
 function startReplay() {
     if (!bReplay) {
 
@@ -676,14 +399,9 @@ function startReplay() {
 
         $("#icon").removeClass("bounce-opacity");
         
-        if (!bPHONEGAP) {
-            soundBGM.volume = 0.8;
-        }else{
-            soundBGM.setVolume(0.8);
-        }
-
+        
+        ////
         bReplay = true;
-
         chay();
 
 
@@ -693,7 +411,8 @@ function startReplay() {
         $("#slider").fadeOut();
 
         $("#icon").addClass("bounce-opacity");
-
+        
+        ///
         bReplay = false;
     }
 
@@ -718,226 +437,13 @@ function stopReplay() {
 }
 
 
+
 function reload() {
     var temp = confirm("Do you want to reload ?");
     if (temp) window.location.href = "";
 }
 
-///////////////////////////////////
-var stopWatch = 0;
-var stopWatchLast = 0;
-var bStopWatch = false;
 
-function startTime() {
-    if (!bStopWatch) {
-        stopWatch = (new Date()).getTime();
-
-        bStopWatch = true;
-    }
-}
-
-function updateTime() {
-    if (bStopWatch) {
-
-        return stopWatchLast = (new Date()).getTime() - stopWatch;
-
-    }
-
-    return 0;
-}
-
-function stopTime() {
-    if (bStopWatch) {
-        bStopWatch = false;
-    }
-}
-
-///////////////////////
-var counterTimer = 0;
-var bBreak = false;
-
-function testBSQ() {
-    setTimeout(function() {
-
-        checkNote();
-
-        //counterTimer+=10;
-        //if (counterTimer >= 1000) {
-        //    console.log(counter++);
-        //    counterTimer = counterTimer-1000;
-        //}
-
-
-
-        if (!bBreak) testBSQ();
-    }, 5)
-}
-
-function chay() {
-    bBreak = false;
-
-    testBSQ();
-    soundBGM.play();
-
-
-    counterTimer = 0;
-    counterNote = 0;
-}
-
-var counterNote = 0;
-
-function checkNote() {
-
-    if (bRecord) {
-
-        var temp;
-
-        if (!bPHONEGAP) {
-            temp = Math.round(soundBGM.currentTime * 1000);
-
-
-            var percent = temp / (soundBGM.duration * 1000) * 100;
-            percent = Math.round(percent);
-            
-            $(".sprite-wave-overlay").width((percent * 1024 / 100) + "px");
-
-            if (percent >= 100) {
-
-                bBreak = true;
-                stopRecord();
-            }
-
-        } else {
-            soundBGM.getCurrentPosition(
-                // success callback
-                function(position) {
-                    if (position > -1) {
-                        temp = (position * 1000);
-
-
-                        var percent = temp / (soundBGM.getDuration() * 1000) * 100;
-                        percent = Math.round(percent);
-                        
-                        $(".sprite-wave-overlay").width((percent * 1024 / 100) + "px");
-
-                        if (percent >= 100) {
-
-                            bBreak = true;
-                            stopRecord();
-                        }
-
-                    }
-                },
-                // error callback
-                function(e) {}
-            );
-
-        }
-
-    }
-
-    if (bReplay) {
-
-        if (!bPHONEGAP) {
-            var temp;
-            temp = Math.round(soundBGM.currentTime * 1000);
-            //temp = counterTimer;
-
-            var percent = temp / (soundBGM.duration * 1000) * 100;
-            percent = Math.round(percent);
-
-
-            $("#slider").width((percent * 460 / 100) + "px");
-
-            if (percent >= 100) {
-                bBreak = true;
-
-                bReplay = false;
-                confirmState();
-            }
-
-            for (var i = 0; i < dataRecord.length; i++) {
-                var tempRecord = dataRecord[i].split(",");
-                var tempTime = tempRecord[0];
-                var tempNote = tempRecord[1];
-
-                var temp1 = parseInt(tempTime);
-
-
-
-                if ((temp1 - 10) < temp && (temp1 + 10) > temp) {
-
-                    if (lastNote != i) {
-
-                        playSound(parseInt(tempNote));
-
-                        counterNote++;
-
-                        $("#time").html(counterNote);
-
-                        console.log(temp1 + " " + parseInt(tempNote));
-
-                        lastNote = i;
-                    }
-                }
-            }
-        } else {
-            soundBGM.getCurrentPosition(
-                // success callback
-                function(position) {
-                    if (position > -1) {
-                        temp = (position * 1000);
-
-                        var percent = temp / (soundBGM.getDuration() * 1000) * 100;
-                        percent = Math.round(percent);
-
-
-                        $("#slider").width((percent * 460 / 100) + "px");
-
-                        if (percent >= 100) {
-                            bBreak = true;
-
-                            bReplay = false;
-                            confirmState();
-                        }
-
-
-                        for (var i = 0; i < dataRecord.length; i++) {
-                            var tempRecord = dataRecord[i].split(",");
-                            var tempTime = tempRecord[0];
-                            var tempNote = tempRecord[1];
-
-                            var temp1 = parseInt(tempTime);
-
-                            if ((temp1 - 10) < temp && (temp1 + 10) > temp) {
-
-                                if (lastNote != i) {
-
-                                    playSound(tempNote);
-
-                                    counterNote++;
-
-                                    $("#time").html(counterNote);
-                                    //console.log(temp1 + " " + parseInt(tempNote));
-
-                                    lastNote = i;
-                                }
-
-
-                            }
-                        }
-
-                    }
-                },
-                // error callback
-                function(e) {
-                    //console.log("Error getting pos=" + e);
-                }
-            );
-        }
-
-    }
-}
 
 //////////////
 function loadUser() {
@@ -984,6 +490,165 @@ function sendAjaxDB(){
         
         alert("Thiet bi hien tai chua ket noi vao internet !");
         
+    }
+    
+}
+
+//////////////
+function breakApart(){
+    for (var i = 0; i < dataRecord.length; i++) {
+        var tempRecord = dataRecord[i].split(",");
+        var tempTime = tempRecord[0];
+        var tempNote = tempRecord[1];
+
+        var temp1 = parseInt(tempTime);
+        
+        arrayNote[i] = {'time':temp1,'note':tempNote};
+        
+        
+    }    
+}
+
+///////
+var counterTimer = 0;
+var bBreak = true;
+var mainTIME = 0;
+
+var mainDurationBGM = 0;
+var counterNote = 0;
+
+function playSound(id) {
+
+    if (bPHONEGAP) {
+
+        var tempID = parseInt(id);
+        var url = strSnd[tempID];
+
+        var my_media = new Media(url, function() { }, function(err) { } );
+        
+        
+        my_media.play();
+
+    } else {
+        
+        var tempID = parseInt(id);
+        
+        if (listAudio[tempID].currentTime > 0) {
+            listAudio[tempID].pause();
+            listAudio[tempID].currentTime = 0;
+            listAudio[tempID].play();
+        } else {
+            listAudio[tempID].play();
+        }
+    }
+
+    if (bRecord) {
+        var temp;
+        
+        //NEW 091014
+        temp = mainTIME;
+        var tempRecord = temp + "," + id;
+        dataRecord.push(tempRecord);
+        
+        if(bsqDebug) $("#time").html(tempRecord + " length : " + dataRecord.length);
+        
+        console.log(tempRecord);
+        //END 091014
+    }
+
+}
+
+//////// SUPERNEW
+function chay() {
+    bBreak = false;
+    
+    counterTimer = 0;
+    counterNote = 0;
+    
+    mainTIME = 0;
+    
+    superPlayTimer();
+}
+
+
+function superPlayTimer(){    
+    bBreak = false;    
+    soundBGM.play();
+    //draw();
+}
+
+
+
+// Draw loop
+var time;
+var elapsedDT = 0;
+function draw() {
+    requestAnimationFrame(draw);
+    var now = new Date().getTime(),
+        dt = now - (time || now);
+    
+    elapsedDT = dt;
+    
+    if(!bBreak) {
+        
+        if(bsqDebug) $("#time").text(mainTIME);
+        
+        mainTIME += dt;
+        newCheckNote();    
+    }    
+    
+    time = now;
+}
+
+
+// Check note loop
+function newCheckNote() {
+    
+     if (bRecord) {        
+        var percent = mainTIME / (mainDurationBGM) * 100;
+        percent = Math.round(percent);
+        
+        $(".sprite-wave-overlay").width((percent * 1024 / 100) + "px");
+        if (percent >= 100) {
+            stopRecord();
+        }
+    }
+    
+    if (bReplay) {
+        
+        var lastMainTime = (mainTIME - elapsedDT);
+        
+         var percent = mainTIME / (mainDurationBGM) * 100;
+            percent = Math.round(percent);
+                        
+            $("#slider").width((percent * 460 / 100) + "px");
+        
+            if (percent >= 100) {
+               bBreak = true;
+               bReplay = false;
+               
+               confirmState();               
+               
+            }else{
+                
+                var tempNote = arrayNote[counterNote];
+                
+                if (tempNote != undefined)            
+                if (lastMainTime <= tempNote.time && mainTIME >= tempNote.time) {
+                    if (lastNote != counterNote) {
+    
+                        if (!bPHONEGAP) playSound(parseInt(tempNote.note));
+                        else playSound(tempNote.note);
+                        
+                        if(bsqDebug) $("#time").html(counterNote);
+                        
+                        lastNote = counterNote;
+                        
+                        counterNote++;                    
+                    }
+                }
+                
+            }
     }
     
 }
